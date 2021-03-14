@@ -1,6 +1,6 @@
-let appId = 'fa3f135a6967ebd61da23b79cf5c160d';
+let apiKey = 'a6a6f345230b4feffee9b2a5c6e783fa';
 let units = 'imperial';
-let searchMethod = 'zip';
+let searchMethod;
 
 function getSearchMethod(searchTerm){
     if (searchTerm.length === 5 && Number.parseInt(searchTerm) === '' === searchTerm)
@@ -11,15 +11,23 @@ searchMethod = "q";
 
 function searchWeather(searchTerm) {
     getSearchMethod(searchTerm);
-   
-    fetch('http://api.openweathermap.org/data/2.5/weather?${searchMethod}={searchTerm}&APPID=${appId}&units=${units}').then(result => {
+
+    fetch('http://api.openweathermap.org/data/2.5/weather?${searchMethod}=${searchTerm}&APIKEY=${apiKey}&units=${units}').then(result => {
        return result.json();
     }).then(result => {
     init(result);
     })
 }
     function init(resultFromServer) {
-console.log(resultFromServer)
+console.log(resultFromServer);
+    }
+
+    document.getElementById('searchBtn').addEventListener('click',()=>{
+        let searchTerm=document.getElementById('searchInput').value;
+        if(searchTerm)
+        searchWeather(searchTerm);
+    })
+
 switch(resultFromServer.weather[0].main){
     case "Clear":
     break;
@@ -51,18 +59,28 @@ let windSpeedElement = document.getElementById('windSpeed');
 let cityHeader = document.getElementById('cityHeader');
 let weatherIcon = document.getElementById('documentIconImg');
 
-weatherIcon.src ="http://openweathermap.org/img/wn/" + resultFromServer.weather[0].icon=".png";
+weatherIcon.src = 'http://openweathermap.org/img/wn/' + resultFromServer.weather[0].icon +'.png';
 
 let resultDescription = resultFromServer.weather[0].description;
+weatherDescriptionHeader.innerText=resultDescription.charAt(0).toUpperCase() + resultDescription.slice(1);
 
-weatherDescriptionHeader.innerText=resultDescription.charAt[0].toUpperCase()= resultDescription.slice[1]
-
-temperatureElement.innerHTML = Math.floor(resultFromServer.main.temp) = '&#176';
-windSpeedElement.innerHTML = 'Winds at ' = Math.floor(resultFromServer.wind.speed) = ' m/s';
+temperatureElement.innerHTML = Math.floor(resultFromServer.main.temp) + '&#176';
+windSpeedElement.innerHTML = 'Winds at ' + Math.floor(resultFromServer.wind.speed) + ' m/s';
 cityHeader.innerHTML = resultfromServer.name;
-humidityElement.innerHTML='Humidity levels at '
+humidityElement.innerHTML='Humidity levels at '+ resultFromServer.main.humidity + '%';
+
+setPositionForWeatherInfo();
 }
 
+function setPositionForWeatherInfo(){
+    let weatherContainer = document.getElementById('weatherContainer');
+    let weatherContainerHeight = weatherContainer.clientHeight;
+    let weatherContainerWidth = weatherContainer.clientWidth;
+
+    weatherContainer.style.left = `calc(50% - ${weatherContainerWidth/2}px)`;
+    weatherContainer.style.top =`calc(50% - ${weatherContainerHeight/1.3}px)`;
+    weatherContainer.style.visibility= 'visibile';
+}
 document.getElementById('searchBtn').addEventListener('click',()=>{
     let searchTerm = document.getElementById('searchInput').value;
     if(searchTerm)
