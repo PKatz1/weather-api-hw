@@ -70,7 +70,7 @@ cityHeader.innerHTML = resultfromServer.name;
 humidityElement.innerHTML='Humidity levels at '+ resultFromServer.main.humidity + '%';
 
 setPositionForWeatherInfo();
-}
+
 
 function setPositionForWeatherInfo(){
     let weatherContainer = document.getElementById('weatherContainer');
